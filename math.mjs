@@ -25,7 +25,7 @@ const resolvePath = (p) => {
 const PROXY_ENGINE = "scramjet";
 const SW_PATH = resolvePath("scramworker.js");
 
-const SCRAMJET_CDN = "https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@master/dist/";
+const SCRAMJET_CDN = "https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@main/";
 
 async function clearOldSW() {
     if ("serviceWorker" in navigator) {
@@ -232,26 +232,40 @@ if (window.self === window.top) {
 
 async function loadScramjetScript() {
     if (window.$scramjetLoadController) return;
-    await new Promise((res, rej) => {
-        const s = document.createElement("script");
-        s.src = SCRAMJET_CDN + "scramjet.all.js";
-        s.async = true;
-        s.onload = res;
-        s.onerror = rej;
-        document.head.appendChild(s);
-    });
+    try {
+        await new Promise((res, rej) => {
+            const s = document.createElement("script");
+            // Some builds use scramjet.all.js, others use scramjet.code.js
+            s.src = SCRAMJET_CDN + "scramjet.all.js";
+            s.async = true;
+            s.onload = res;
+            s.onerror = () => {
+                // Try fallback to scramjet.code.js
+                const s2 = document.createElement("script");
+                s2.src = SCRAMJET_CDN + "scramjet.code.js";
+                s2.async = true;
+                s2.onload = res;
+                s2.onerror = rej;
+                document.head.appendChild(s2);
+            };
+            document.head.appendChild(s);
+        });
+    } catch (e) {
+        console.error("[monkturne] Failed to load Scramjet script from CDN:", e);
+        throw new Error("Scramjet script load failed. Check CDN connectivity.");
+    }
 }
 
 function buildController() {
     let loader = window.$scramjetLoadController ? window.$scramjetLoadController() : window;
     if (!loader.ScramjetController) {
-        // Try to find it elsewhere or return null
+        console.error("[monkturne] ScramjetController not found in window or loader.");
         return null;
     }
     return new loader.ScramjetController({
         files: {
             wasm: SCRAMJET_CDN + "scramjet.wasm.wasm",
-            all: SCRAMJET_CDN + "scramjet.all.js",
+            all: SCRAMJET_CDN + "scramjet.code.js",
             sync: SCRAMJET_CDN + "scramjet.sync.js"
         },
         flags: {

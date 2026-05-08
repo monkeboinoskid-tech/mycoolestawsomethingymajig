@@ -1,4 +1,9 @@
-importScripts("https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@master/dist/scramjet.all.js");
+try {
+    importScripts("https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@main/scramjet.all.js");
+} catch (e) {}
+if (typeof ScramjetWorker === "undefined") {
+    importScripts("https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@main/scramjet.code.js");
+}
 
 const scramjet = new ScramjetWorker();
 
