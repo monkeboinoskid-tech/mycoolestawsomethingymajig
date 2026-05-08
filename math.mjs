@@ -2,8 +2,10 @@ import { BareMuxConnection } from "./baremux/index.mjs";
 
 const NOCTURNE_VERSION = "5";
 
+const resolve = (p) => new URL(p, window.location.href).href;
+
 const PROXY_ENGINE = "scramjet";
-const SW_PATH = "scramworker.js";
+const SW_PATH = resolve("scramworker.js");
 
 async function clearOldSW() {
     if ("serviceWorker" in navigator) {
@@ -79,7 +81,7 @@ if (window.self === window.top) {
     _swReady = registerSW().catch(e => { triggerAutoReset("sw: " + e.message); });
 }
 
-const connection = new BareMuxConnection("bareworker.js");
+const connection = new BareMuxConnection(resolve("bareworker.js"));
 const EPOXY_URL = "https://cdn.jsdelivr.net/npm/@mercuryworkshop/epoxy-transport/dist/index.mjs";
 
 function makeTransportCode() {
@@ -198,7 +200,7 @@ async function loadScramjetScript() {
     if (window.$scramjetLoadController) return;
     await new Promise((res, rej) => {
         const s = document.createElement("script");
-        s.src = "scram/scramjet.all.js";
+        s.src = resolve("scram/scramjet.all.js");
         s.async = true;
         s.onload = res;
         s.onerror = rej;
@@ -211,9 +213,9 @@ function buildController() {
     const loader = window.$scramjetLoadController();
     return new loader.ScramjetController({
         files: {
-            wasm: "scram/scramjet.wasm.wasm",
-            all: "scram/scramjet.all.js",
-            sync: "scram/scramjet.sync.js"
+            wasm: resolve("scram/scramjet.wasm.wasm"),
+            all: resolve("scram/scramjet.all.js"),
+            sync: resolve("scram/scramjet.sync.js")
         },
         flags: {
             rewriterLogs: false,

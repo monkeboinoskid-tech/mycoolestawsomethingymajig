@@ -90,32 +90,31 @@
     };
 
     const isHome = !!document.getElementById("settingsPanel");
-    const settingsBtn = '<a class="dock-btn" data-path="/settings.html" href="/settings.html" aria-label="Settings">' + ICONS.settings + '</a>';
+    const settingsBtn = '<a class="dock-btn" data-path="settings.html" href="settings.html" aria-label="Settings">' + ICONS.settings + '</a>';
     const homeBtn = isHome
-        ? '<button class="dock-btn" id="dockHome" data-path="/" aria-label="Home">' + ICONS.home + '</button>'
-        : '<a class="dock-btn" data-path="/" href="/" aria-label="Home">' + ICONS.home + '</a>';
+        ? '<button class="dock-btn" id="dockHome" data-path="index.html" aria-label="Home">' + ICONS.home + '</button>'
+        : '<a class="dock-btn" data-path="index.html" href="index.html" aria-label="Home">' + ICONS.home + '</a>';
 
     dock.innerHTML = `
         ${homeBtn}
-        <a class="dock-btn" data-path="/games.html" href="/games.html" aria-label="Games">${ICONS.games}</a>
+        <a class="dock-btn" data-path="games.html" href="games.html" aria-label="Games">${ICONS.games}</a>
         ${settingsBtn}
         <button class="dock-btn dock-toggle" id="dockExpand" aria-label="More apps" aria-expanded="false">${ICONS.plus}</button>
         <div class="dock-popover" id="dockPopover" role="menu">
-            <a class="dock-btn" data-path="/apps.html" href="/apps.html" aria-label="Apps" role="menuitem">${ICONS.apps}</a>
-            <a class="dock-btn" data-path="/code.html" href="/code.html" aria-label="Editor" role="menuitem">${ICONS.editor}</a>
-            <a class="dock-btn" data-path="/movies.html" href="/movies.html" aria-label="Movies" role="menuitem">${ICONS.movies}</a>
-            <a class="dock-btn" data-path="/tools.html" href="/tools.html" aria-label="Tools" role="menuitem">${ICONS.tools}</a>
-            <a class="dock-btn" data-path="/ai.html" href="/ai.html" aria-label="AI" role="menuitem">${ICONS.ai}</a>
-            <a class="dock-btn" data-path="/account.html" href="/account.html" aria-label="Account" role="menuitem">${ICONS.account}</a>
-            <a class="dock-btn" data-path="/legal.html" href="/legal.html" aria-label="Legal" role="menuitem">${ICONS.legal}</a>
+            <a class="dock-btn" data-path="apps.html" href="apps.html" aria-label="Apps" role="menuitem">${ICONS.apps}</a>
+            <a class="dock-btn" data-path="code.html" href="code.html" aria-label="Editor" role="menuitem">${ICONS.editor}</a>
+            <a class="dock-btn" data-path="movies.html" href="movies.html" aria-label="Movies" role="menuitem">${ICONS.movies}</a>
+            <a class="dock-btn" data-path="tools.html" href="tools.html" aria-label="Tools" role="menuitem">${ICONS.tools}</a>
+            <a class="dock-btn" data-path="ai.html" href="ai.html" aria-label="AI" role="menuitem">${ICONS.ai}</a>
+            <a class="dock-btn" data-path="account.html" href="account.html" aria-label="Account" role="menuitem">${ICONS.account}</a>
+            <a class="dock-btn" data-path="legal.html" href="legal.html" aria-label="Legal" role="menuitem">${ICONS.legal}</a>
         </div>`;
 
-    const path = location.pathname.replace(/\/$/, "") || "/";
+    const path = location.pathname.split("/").pop() || "index.html";
     dock.querySelectorAll("[data-path]").forEach(el => {
         const p = el.dataset.path;
-        const match = (p === "/" && (path === "/" || path === "/index.html")) ||
-                      p === path ||
-                      (p !== "/" && path === p);
+        const match = (p === "index.html" && (path === "" || path === "index.html" || path === "/")) ||
+                      p === path;
         if (match) el.classList.add("active");
     });
     if (dock.querySelector(".dock-popover .active")) {
