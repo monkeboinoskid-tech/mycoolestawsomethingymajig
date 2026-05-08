@@ -75,6 +75,21 @@
     if (!dock || dock.dataset.docked === "1") return;
     dock.dataset.docked = "1";
 
+    const base = (function() {
+        const p = window.location.pathname;
+        const pages = ["/settings.html", "/games.html", "/apps.html", "/code.html", "/banned.html", "/portable.html", "/privacy.html", "/terms.html", "/index.html"];
+        for (const pg of pages) {
+            const idx = p.lastIndexOf(pg);
+            if (idx !== -1) return p.substring(0, idx + 1);
+        }
+        return p.substring(0, p.lastIndexOf("/") + 1);
+    })();
+
+    const resolve = (p) => {
+        if (p.includes("://") || p.startsWith("#")) return p;
+        return base + p;
+    };
+
     const ICONS = {
         home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-4v-6h-6v6H5a2 2 0 0 1-2-2z"/></svg>',
         games: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h4M8 9v4"/><path d="M15 12h.01"/><path d="M18 10h.01"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>',
@@ -89,25 +104,25 @@
         legal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 7l7-2 7 2"/><path d="M2 11l3-4 3 4-3 4z"/><path d="M16 11l3-4 3 4-3 4z"/></svg>'
     };
 
-    const isHome = !!document.getElementById("settingsPanel");
-    const settingsBtn = '<a class="dock-btn" data-path="settings.html" href="settings.html" aria-label="Settings">' + ICONS.settings + '</a>';
+    const isHome = !!document.getElementById("homePage");
+    const settingsBtn = `<a class="dock-btn" data-path="settings.html" href="${resolve("settings.html")}" aria-label="Settings">${ICONS.settings}</a>`;
     const homeBtn = isHome
-        ? '<button class="dock-btn" id="dockHome" data-path="index.html" aria-label="Home">' + ICONS.home + '</button>'
-        : '<a class="dock-btn" data-path="index.html" href="index.html" aria-label="Home">' + ICONS.home + '</a>';
+        ? `<button class="dock-btn" id="dockHome" data-path="index.html" aria-label="Home">${ICONS.home}</button>`
+        : `<a class="dock-btn" data-path="index.html" href="${resolve("index.html")}" aria-label="Home">${ICONS.home}</a>`;
 
     dock.innerHTML = `
         ${homeBtn}
-        <a class="dock-btn" data-path="games.html" href="games.html" aria-label="Games">${ICONS.games}</a>
+        <a class="dock-btn" data-path="games.html" href="${resolve("games.html")}" aria-label="Games">${ICONS.games}</a>
         ${settingsBtn}
         <button class="dock-btn dock-toggle" id="dockExpand" aria-label="More apps" aria-expanded="false">${ICONS.plus}</button>
         <div class="dock-popover" id="dockPopover" role="menu">
-            <a class="dock-btn" data-path="apps.html" href="apps.html" aria-label="Apps" role="menuitem">${ICONS.apps}</a>
-            <a class="dock-btn" data-path="code.html" href="code.html" aria-label="Editor" role="menuitem">${ICONS.editor}</a>
-            <a class="dock-btn" data-path="movies.html" href="movies.html" aria-label="Movies" role="menuitem">${ICONS.movies}</a>
-            <a class="dock-btn" data-path="tools.html" href="tools.html" aria-label="Tools" role="menuitem">${ICONS.tools}</a>
-            <a class="dock-btn" data-path="ai.html" href="ai.html" aria-label="AI" role="menuitem">${ICONS.ai}</a>
-            <a class="dock-btn" data-path="account.html" href="account.html" aria-label="Account" role="menuitem">${ICONS.account}</a>
-            <a class="dock-btn" data-path="legal.html" href="legal.html" aria-label="Legal" role="menuitem">${ICONS.legal}</a>
+            <a class="dock-btn" data-path="apps.html" href="${resolve("apps.html")}" aria-label="Apps" role="menuitem">${ICONS.apps}</a>
+            <a class="dock-btn" data-path="code.html" href="${resolve("code.html")}" aria-label="Editor" role="menuitem">${ICONS.editor}</a>
+            <a class="dock-btn" data-path="movies.html" href="${resolve("movies.html")}" aria-label="Movies" role="menuitem">${ICONS.movies}</a>
+            <a class="dock-btn" data-path="tools.html" href="${resolve("tools.html")}" aria-label="Tools" role="menuitem">${ICONS.tools}</a>
+            <a class="dock-btn" data-path="ai.html" href="${resolve("ai.html")}" aria-label="AI" role="menuitem">${ICONS.ai}</a>
+            <a class="dock-btn" data-path="account.html" href="${resolve("account.html")}" aria-label="Account" role="menuitem">${ICONS.account}</a>
+            <a class="dock-btn" data-path="legal.html" href="${resolve("legal.html")}" aria-label="Legal" role="menuitem">${ICONS.legal}</a>
         </div>`;
 
     const path = location.pathname.split("/").pop() || "index.html";

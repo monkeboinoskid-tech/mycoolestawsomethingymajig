@@ -4,10 +4,10 @@ const NOCTURNE_VERSION = "5";
 
 const base = (function() {
     const p = window.location.pathname;
-    if (p.includes("/search/")) return p.split("/search/")[0] + "/";
     const pages = ["/settings.html", "/games.html", "/apps.html", "/code.html", "/banned.html", "/portable.html", "/privacy.html", "/terms.html", "/index.html"];
     for (const pg of pages) {
-        if (p.includes(pg)) return p.split(pg)[0] + "/";
+        const idx = p.lastIndexOf(pg);
+        if (idx !== -1) return p.substring(0, idx + 1);
     }
     return p.substring(0, p.lastIndexOf("/") + 1);
 })();

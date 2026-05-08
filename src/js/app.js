@@ -203,7 +203,7 @@ async function load(url, addToHistory = true) {
         frame.classList.remove("visible");
 
         if (addToHistory) {
-            history.pushState(null, "", "search/" + obfuscate(url));
+            history.pushState(null, "", "#search/" + obfuscate(url));
             navStack = navStack.slice(0, navIndex + 1);
             navStack.push(url);
             navIndex = navStack.length - 1;
@@ -427,10 +427,9 @@ document.addEventListener("keydown", e => {
 });
 
 window.addEventListener("popstate", () => {
-    const p = window.location.pathname;
-    if (p.includes("/search/")) {
-        const parts = p.split("/search/");
-        const enc = parts[parts.length - 1];
+    const h = window.location.hash;
+    if (h.startsWith("#search/")) {
+        const enc = h.slice(8);
         const decoded = deobfuscate(enc);
         if (decoded) load(decoded, false);
     } else {
@@ -438,10 +437,9 @@ window.addEventListener("popstate", () => {
     }
 });
 
-const initPath = window.location.pathname;
-if (initPath.includes("/search/")) {
-    const parts = initPath.split("/search/");
-    const enc = parts[parts.length - 1];
+const initHash = window.location.hash;
+if (initHash.startsWith("#search/")) {
+    const enc = initHash.slice(8);
     const decoded = deobfuscate(enc);
     if (decoded) load(decoded);
 }
