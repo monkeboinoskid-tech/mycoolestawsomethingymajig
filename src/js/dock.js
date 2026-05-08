@@ -77,12 +77,10 @@
 
     const base = (function() {
         const p = window.location.pathname;
-        const pages = ["/settings.html", "/games.html", "/apps.html", "/code.html", "/banned.html", "/portable.html", "/privacy.html", "/terms.html", "/index.html"];
-        for (const pg of pages) {
-            const idx = p.lastIndexOf(pg);
-            if (idx !== -1) return p.substring(0, idx + 1);
+        if (p.includes(".html") || p.includes(".mjs") || p.includes(".js")) {
+            return p.substring(0, p.lastIndexOf("/") + 1);
         }
-        return p.substring(0, p.lastIndexOf("/") + 1);
+        return p.endsWith("/") ? p : p + "/";
     })();
 
     const resolve = (p) => {
@@ -106,6 +104,7 @@
 
     const isHome = !!document.getElementById("homePage");
     const settingsBtn = `<a class="dock-btn" data-path="settings.html" href="${resolve("settings.html")}" aria-label="Settings">${ICONS.settings}</a>`;
+    const moviesBtn = `<a class="dock-btn" data-path="movies.html" href="${resolve("movies.html")}" aria-label="Movies">${ICONS.movies}</a>`;
     const homeBtn = isHome
         ? `<button class="dock-btn" id="dockHome" data-path="index.html" aria-label="Home">${ICONS.home}</button>`
         : `<a class="dock-btn" data-path="index.html" href="${resolve("index.html")}" aria-label="Home">${ICONS.home}</a>`;
@@ -113,12 +112,12 @@
     dock.innerHTML = `
         ${homeBtn}
         <a class="dock-btn" data-path="games.html" href="${resolve("games.html")}" aria-label="Games">${ICONS.games}</a>
+        ${moviesBtn}
         ${settingsBtn}
         <button class="dock-btn dock-toggle" id="dockExpand" aria-label="More apps" aria-expanded="false">${ICONS.plus}</button>
         <div class="dock-popover" id="dockPopover" role="menu">
             <a class="dock-btn" data-path="apps.html" href="${resolve("apps.html")}" aria-label="Apps" role="menuitem">${ICONS.apps}</a>
             <a class="dock-btn" data-path="code.html" href="${resolve("code.html")}" aria-label="Editor" role="menuitem">${ICONS.editor}</a>
-            <a class="dock-btn" data-path="movies.html" href="${resolve("movies.html")}" aria-label="Movies" role="menuitem">${ICONS.movies}</a>
             <a class="dock-btn" data-path="tools.html" href="${resolve("tools.html")}" aria-label="Tools" role="menuitem">${ICONS.tools}</a>
             <a class="dock-btn" data-path="ai.html" href="${resolve("ai.html")}" aria-label="AI" role="menuitem">${ICONS.ai}</a>
             <a class="dock-btn" data-path="account.html" href="${resolve("account.html")}" aria-label="Account" role="menuitem">${ICONS.account}</a>
@@ -126,10 +125,11 @@
         </div>`;
 
     const path = location.pathname.split("/").pop() || "index.html";
+    const isRoot = path === "index.html" || path === "" || !path.includes("."); 
+    
     dock.querySelectorAll("[data-path]").forEach(el => {
         const p = el.dataset.path;
-        const match = (p === "index.html" && (path === "" || path === "index.html" || path === "/")) ||
-                      p === path;
+        const match = (p === "index.html" && isRoot) || p === path;
         if (match) el.classList.add("active");
     });
     if (dock.querySelector(".dock-popover .active")) {

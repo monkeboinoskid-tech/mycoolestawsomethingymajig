@@ -23,6 +23,7 @@ export default defineConfig(({mode}) => {
           terms: path.resolve(__dirname, 'terms.html'),
           banned: path.resolve(__dirname, 'banned.html'),
           code: path.resolve(__dirname, 'code.html'),
+          movies: path.resolve(__dirname, 'movies.html'),
         },
       },
     },

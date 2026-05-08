@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-69T9E59SM7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-69T9E59SM7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Monkturne · Movies</title>
+    <style>html,body{background:#05060d;color:#eae6ff;margin:0}</style>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='%23c9c1ff'/><circle cx='22' cy='14' r='11' fill='%23050610'/></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/global.css">
+    <link rel="stylesheet" href="src/css/dock.css">
+    <link rel="stylesheet" href="src/css/movies.css">
+</head>
+<body>
+
+<div class="page-header">
+    <div>
+        <span class="brand-title">Monkturne</span>
+        <span class="brand-sub">Movies & TV</span>
+    </div>
+    <a href="index.html" class="back">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back
+    </a>
+</div>
+
+<div id="setupNotice" class="setup-notice hidden">
+    <div class="setup-card">
+        <div class="setup-icon">!</div>
+        <div class="setup-title">TMDB API key not configured</div>
+        <p class="setup-desc">To enable movies and TV, set the <code>TMDB_API_KEY</code> environment variable on your server, then restart Monkturne. Get a free key at <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noreferrer">themoviedb.org</a>.</p>
+    </div>
+</div>
+
+<main class="wrap">
+
+    <section class="hero" id="hero">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-fade"></div>
+        <div class="hero-content" id="heroContent"></div>
+        <div class="hero-dots" id="heroDots"></div>
+    </section>
+
+    <div class="search-row">
+        <form id="searchForm" class="search-box">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="7" cy="7" r="5"></circle>
+                <line x1="13" y1="13" x2="10.5" y2="10.5"></line>
+            </svg>
+            <input id="searchInput" type="text" placeholder="Search movies & TV" autocomplete="off" spellcheck="false">
+        </form>
+        <div class="kind-tabs">
+            <button class="kind-tab active" data-kind="all">All</button>
+            <button class="kind-tab" data-kind="movie">Movies</button>
+            <button class="kind-tab" data-kind="tv">TV</button>
+        </div>
+    </div>
+
+    <div id="searchResults" class="search-results hidden"></div>
+
+    <div id="browse">
+        <section class="row" id="continueRow">
+            <div class="row-head">
+                <h2 class="row-title">Continue Watching</h2>
+                <button class="row-clear" id="continueClear">Clear</button>
+            </div>
+            <div class="row-track" id="continueTrack"></div>
+        </section>
+
+        <section class="row">
+            <div class="row-head"><h2 class="row-title">Trending This Week</h2></div>
+            <div class="row-track" id="trendingTrack"></div>
+        </section>
+
+        <section class="row">
+            <div class="row-head"><h2 class="row-title">Popular Movies</h2></div>
+            <div class="row-track" id="popMoviesTrack"></div>
+        </section>
+
+        <section class="row">
+            <div class="row-head"><h2 class="row-title">Popular TV</h2></div>
+            <div class="row-track" id="popTvTrack"></div>
+        </section>
+
+        <section class="row">
+            <div class="row-head"><h2 class="row-title">Top Rated Movies</h2></div>
+            <div class="row-track" id="topMoviesTrack"></div>
+        </section>
+
+        <section class="row">
+            <div class="row-head"><h2 class="row-title">Top Rated TV</h2></div>
+            <div class="row-track" id="topTvTrack"></div>
+        </section>
+    </div>
+
+</main>
+
+<div id="detailOverlay" class="overlay">
+    <div class="overlay-inner" id="detailInner"></div>
+</div>
+
+<div id="playerOverlay" class="player-overlay">
+    <button class="player-close" id="playerClose" aria-label="Close player">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="player-frame-wrap">
+        <iframe id="playerFrame" allow="autoplay; fullscreen; encrypted-media" allowfullscreen referrerpolicy="origin"></iframe>
+    </div>
+</div>
+
+<nav id="dock"></nav>
+<script src="src/js/dock.js" type="module"></script>
+
+<script type="module" src="src/js/movies.js"></script>
+
+</body>
+</html>

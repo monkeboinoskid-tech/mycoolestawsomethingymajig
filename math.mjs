@@ -4,12 +4,12 @@ const NOCTURNE_VERSION = "5";
 
 const base = (function() {
     const p = window.location.pathname;
-    const pages = ["/settings.html", "/games.html", "/apps.html", "/code.html", "/banned.html", "/portable.html", "/privacy.html", "/terms.html", "/index.html"];
-    for (const pg of pages) {
-        const idx = p.lastIndexOf(pg);
-        if (idx !== -1) return p.substring(0, idx + 1);
+    // If the path looks like a file, get its directory
+    if (p.includes(".html") || p.includes(".mjs") || p.includes(".js")) {
+        return p.substring(0, p.lastIndexOf("/") + 1);
     }
-    return p.substring(0, p.lastIndexOf("/") + 1);
+    // If it's a directory (with or without trailing slash), ensure it ends with slash
+    return p.endsWith("/") ? p : p + "/";
 })();
 
 const resolve = (p) => {
@@ -137,11 +137,12 @@ return [EpoxyWrapped, "' + EPOXY_URL + '"];';
 
 const WISP_PATHS = [
     "wss://wisp.mercurywork.shop/",
+    "wss://wisp.z1g.pro/",
+    "wss://wisp.pydis.com/",
     "api/sync/",
     "api/v1/sync/",
     "api/v2/connect/",
     "api/realtime/",
-    "api/notifications/",
     "api/feed/",
     "api/channel/",
     "api/stream/"
@@ -159,15 +160,24 @@ function shuffleArr(a) {
 let _transportReady = Promise.resolve();
 
 if (window.self === window.top) {
-    const wispProto = location.protocol === "https:" ? "wss:" : "ws:";
-    const code = makeTransportCode();
     const transportPref = localStorage.getItem("nocturne-transport-pref") || "auto";
     const useCfDns = localStorage.getItem("nocturne-cf-dns") !== "0";
 
     const lastGood = localStorage.getItem("nocturne-wisp-path");
     let candidates = shuffleArr(WISP_PATHS);
     
-    // Cloudflare specific candidates if selected
+    // Prioritize absolute URLs on static hosts to avoid waiting for local 404s
+    const isStaticHost = location.hostname.includes("github.io") || 
+                         location.hostname.includes("vercel") || 
+                         location.hostname.includes("netlify") ||
+                         location.hostname.includes("pages.dev");
+    
+    if (isStaticHost) {
+        const absolute = candidates.filter(p => p.includes("://"));
+        const relative = candidates.filter(p => !p.includes("://"));
+        candidates = [...absolute, ...relative];
+    }
+
     if (transportPref === "cloudflare") {
         candidates = ["/api/v2/connect/", "/api/sync/", ...candidates];
     }
@@ -182,19 +192,22 @@ if (window.self === window.top) {
         for (let i = 0; i < candidates.length; i++) {
             const path = candidates[i];
             let wispUrl = path;
-            if (!path.includes("://")) {
+            const isLocalPath = !path.includes("://");
+
+            if (isLocalPath) {
                 wispUrl = (location.protocol === "https:" ? "wss:" : "ws:") + "//" + location.host + resolvePath(path);
             }
             const opts = [{ wisp: wispUrl }];
             
             if (useCfDns) {
-                // Add DNS preference for Epoxy/Bare-Mux if the implementation supports it in opts
-                // Many epoxy implementations look for 'dns' or 'udp' flags
                 opts[0].dns = "1.1.1.1";
             }
 
-            const timeoutMs = i === 0 ? 6000 : 3500;
+            // Short timeout for local paths on static hosts because we know they WILL fail
+            const timeoutMs = (isLocalPath && isStaticHost) ? 1000 : (i === 0 ? 6000 : 3500);
+            
             try {
+                const code = makeTransportCode();
                 await Promise.race([
                     connection.setManualTransport(code, opts),
                     new Promise((_, r) => setTimeout(() => r(new Error("timeout @ " + path)), timeoutMs))
@@ -205,7 +218,8 @@ if (window.self === window.top) {
             } catch (e) {
                 lastError = e;
                 console.warn("[monkturne] wisp path failed:", path, e.message);
-                await new Promise(r => setTimeout(r, 200));
+                // No delay on knowledge of failure for static host
+                if (!(isLocalPath && isStaticHost)) await new Promise(r => setTimeout(r, 200));
             }
         }
         const errMsg = (lastError && lastError.message) || "all wisp paths failed";
