@@ -25,6 +25,8 @@ const resolvePath = (p) => {
 const PROXY_ENGINE = "scramjet";
 const SW_PATH = resolvePath("scramworker.js");
 
+const SCRAMJET_CDN = "https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@master/dist/";
+
 async function clearOldSW() {
     if ("serviceWorker" in navigator) {
         const regs = await navigator.serviceWorker.getRegistrations();
@@ -232,7 +234,7 @@ async function loadScramjetScript() {
     if (window.$scramjetLoadController) return;
     await new Promise((res, rej) => {
         const s = document.createElement("script");
-        s.src = resolve("scram/scramjet.all.js");
+        s.src = SCRAMJET_CDN + "scramjet.all.js";
         s.async = true;
         s.onload = res;
         s.onerror = rej;
@@ -241,13 +243,16 @@ async function loadScramjetScript() {
 }
 
 function buildController() {
-    if (!window.$scramjetLoadController) return null;
-    const loader = window.$scramjetLoadController();
+    let loader = window.$scramjetLoadController ? window.$scramjetLoadController() : window;
+    if (!loader.ScramjetController) {
+        // Try to find it elsewhere or return null
+        return null;
+    }
     return new loader.ScramjetController({
         files: {
-            wasm: resolve("scram/scramjet.wasm.wasm"),
-            all: resolve("scram/scramjet.all.js"),
-            sync: resolve("scram/scramjet.sync.js")
+            wasm: SCRAMJET_CDN + "scramjet.wasm.wasm",
+            all: SCRAMJET_CDN + "scramjet.all.js",
+            sync: SCRAMJET_CDN + "scramjet.sync.js"
         },
         flags: {
             rewriterLogs: false,
