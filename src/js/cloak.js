@@ -1,4 +1,5 @@
 const PRESETS = {
+    google:    { title: "Google",           icon: "https://www.google.com/favicon.ico" },
     classroom: { title: "Google Classroom", icon: "https://ssl.gstatic.com/classroom/favicon.ico" },
     khan:      { title: "Khan Academy",     icon: "https://www.khanacademy.org/favicon.ico" },
     docs:      { title: "Google Docs",      icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
@@ -8,7 +9,10 @@ const PRESETS = {
     drive:     { title: "My Drive — Google Drive", icon: "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" },
     canvas:    { title: "Dashboard — Canvas", icon: "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" },
     clever:    { title: "Clever | Log in",  icon: "https://assets.clever.com/launchpad/c64d85202/favicon.ico" },
-    deltamath: { title: "DeltaMath",        icon: "https://deltamath.com/images/favicon.ico" }
+    deltamath: { title: "DeltaMath",        icon: "https://deltamath.com/images/favicon.ico" },
+    kahoot:    { title: "Kahoot!",          icon: "https://kahoot.it/favicon.ico" },
+    wikipedia: { title: "Wikipedia",        icon: "https://en.wikipedia.org/favicon.ico" },
+    newtab:    { title: "New Tab",          icon: "https://www.google.com/favicon.ico" }
 };
 
 const DEFAULT_TITLE = document.title;

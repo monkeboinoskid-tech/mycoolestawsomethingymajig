@@ -384,7 +384,6 @@ cloakSelect.addEventListener("change", () => {
     const v = cloakSelect.value;
     if (v) applyCloak(v); else resetCloak();
 });
-restoreCloak();
 
 if (localStorage.getItem("nocturne-auto-cloak") === "1" && window.self === window.top && window.name !== "__monkturne_cloak") {
     const win = window.open('about:blank', '_blank');

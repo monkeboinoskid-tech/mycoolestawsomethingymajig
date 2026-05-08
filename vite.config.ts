@@ -17,7 +17,6 @@ export default defineConfig(({mode}) => {
           main: path.resolve(__dirname, 'index.html'),
           settings: path.resolve(__dirname, 'settings.html'),
           games: path.resolve(__dirname, 'games.html'),
-          portable: path.resolve(__dirname, 'portable.html'),
           apps: path.resolve(__dirname, 'apps.html'),
           privacy: path.resolve(__dirname, 'privacy.html'),
           terms: path.resolve(__dirname, 'terms.html'),

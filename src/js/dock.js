@@ -1,5 +1,8 @@
+import { restoreCloak } from "./cloak.js";
+
 (function applyGlobalPrefs() {
     try {
+        restoreCloak();
         const accent = localStorage.getItem("nocturne-accent");
         if (accent) {
             document.documentElement.style.setProperty("--accent", accent);

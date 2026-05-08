@@ -1,3 +1,5 @@
+import { listCloaks, applyCloak, restoreCloak, reset as resetCloak } from "./cloak.js";
+
 const $ = id => document.getElementById(id);
 
 const PREFS = {
@@ -30,15 +32,8 @@ const ENGINES = {
 };
 
 const CLOAKS = [
-    { id: "", label: "Off" },
-    { id: "google",     label: "Google" },
-    { id: "classroom",  label: "Google Classroom" },
-    { id: "drive",      label: "Google Drive" },
-    { id: "docs",       label: "Google Docs" },
-    { id: "kahoot",     label: "Kahoot!" },
-    { id: "khan",       label: "Khan Academy" },
-    { id: "wikipedia",  label: "Wikipedia" },
-    { id: "newtab",     label: "New Tab" }
+    { id: "", title: "Off" },
+    ...listCloaks()
 ];
 
 function get(key, dflt) {
@@ -215,12 +210,14 @@ function cloakToAboutBlank() {
 const cloakSelect = $("cloakSelect");
 CLOAKS.forEach(c => {
     const opt = document.createElement("option");
-    opt.value = c.id; opt.textContent = c.label;
+    opt.value = c.id; opt.textContent = c.title || c.label;
     cloakSelect.appendChild(opt);
 });
 cloakSelect.value = get(PREFS.cloak, "");
 cloakSelect.addEventListener("change", () => {
-    set(PREFS.cloak, cloakSelect.value);
+    const v = cloakSelect.value;
+    set(PREFS.cloak, v);
+    if (v) applyCloak(v); else resetCloak();
 });
 
 const proxyEngineSelect = $("proxyEngineSelect");
