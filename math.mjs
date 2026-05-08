@@ -2,10 +2,28 @@ import { BareMuxConnection } from "./baremux/index.mjs";
 
 const NOCTURNE_VERSION = "5";
 
-const resolve = (p) => new URL(p, window.location.href).href;
+const base = (function() {
+    const p = window.location.pathname;
+    if (p.includes("/search/")) return p.split("/search/")[0] + "/";
+    const pages = ["/settings.html", "/games.html", "/apps.html", "/code.html", "/banned.html", "/portable.html", "/privacy.html", "/terms.html", "/index.html"];
+    for (const pg of pages) {
+        if (p.includes(pg)) return p.split(pg)[0] + "/";
+    }
+    return p.substring(0, p.lastIndexOf("/") + 1);
+})();
+
+const resolve = (p) => {
+    if (p.includes("://")) return p;
+    return new URL(p, window.location.origin + base).href;
+};
+
+const resolvePath = (p) => {
+    if (p.includes("://")) return p;
+    return new URL(p, window.location.origin + base).pathname;
+};
 
 const PROXY_ENGINE = "scramjet";
-const SW_PATH = resolve("scramworker.js");
+const SW_PATH = resolvePath("scramworker.js");
 
 async function clearOldSW() {
     if ("serviceWorker" in navigator) {
@@ -55,10 +73,10 @@ function triggerAutoReset(reason) {
 
 async function registerSW() {
     if (!navigator.serviceWorker) throw new Error("Service workers not supported.");
-    const existing = await navigator.serviceWorker.getRegistration("/");
+    const existing = await navigator.serviceWorker.getRegistration(base);
     if (existing) existing.update().catch(() => {});
     else {
-        const opts = { scope: "/", updateViaCache: "none" };
+        const opts = { scope: base, updateViaCache: "none" };
         if (PROXY_ENGINE === "nocturne") opts.type = "module";
         await navigator.serviceWorker.register(SW_PATH, opts);
     }
@@ -81,7 +99,7 @@ if (window.self === window.top) {
     _swReady = registerSW().catch(e => { triggerAutoReset("sw: " + e.message); });
 }
 
-const connection = new BareMuxConnection(resolve("bareworker.js"));
+const connection = new BareMuxConnection(resolvePath("bareworker.js"));
 const EPOXY_URL = "https://cdn.jsdelivr.net/npm/@mercuryworkshop/epoxy-transport/dist/index.mjs";
 
 function makeTransportCode() {
@@ -119,14 +137,14 @@ return [EpoxyWrapped, "' + EPOXY_URL + '"];';
 
 const WISP_PATHS = [
     "wss://wisp.mercurywork.shop/",
-    "/api/sync/",
-    "/api/v1/sync/",
-    "/api/v2/connect/",
-    "/api/realtime/",
-    "/api/notifications/",
-    "/api/feed/",
-    "/api/channel/",
-    "/api/stream/"
+    "api/sync/",
+    "api/v1/sync/",
+    "api/v2/connect/",
+    "api/realtime/",
+    "api/notifications/",
+    "api/feed/",
+    "api/channel/",
+    "api/stream/"
 ];
 
 function shuffleArr(a) {
@@ -165,7 +183,7 @@ if (window.self === window.top) {
             const path = candidates[i];
             let wispUrl = path;
             if (!path.includes("://")) {
-                wispUrl = wispProto + "//" + location.host + path;
+                wispUrl = (location.protocol === "https:" ? "wss:" : "ws:") + "//" + location.host + resolvePath(path);
             }
             const opts = [{ wisp: wispUrl }];
             
