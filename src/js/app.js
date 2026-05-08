@@ -3,7 +3,6 @@ import { initPerformance } from "./performance.js";
 import { mountLoader } from "./loader.js";
 import { wireHoverPrefetch, prefetchedUrl } from "./prefetch.js";
 import { listCloaks, applyCloak, restoreCloak, reset as resetCloak } from "./cloak.js";
-import { initWelcome } from "./welcome.js";
 
 const frame = document.getElementById("frame");
 const toolbar = document.getElementById("toolbar");
@@ -449,4 +448,3 @@ if (initPath.includes("/search/")) {
 
 updateNavButtons();
 initPerformance();
-initWelcome();
