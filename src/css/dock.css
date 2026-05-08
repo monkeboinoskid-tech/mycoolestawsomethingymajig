@@ -1,0 +1,107 @@
+#dock {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 20;
+    background: var(--panel);
+    padding: 6px;
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    animation: dockIn 0.55s var(--ease) 0.22s forwards;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes dockIn {
+    from { transform: translate(-50%, 18px); opacity: 0; }
+    to   { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.dock-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color: var(--fg-3);
+    transition: all 0.25s var(--ease);
+    text-decoration: none;
+}
+
+.dock-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--fg);
+    transform: translateY(-2px);
+}
+
+.dock-btn:active { transform: translateY(0); }
+
+.dock-btn.active {
+    background: var(--line-2);
+    color: var(--accent);
+}
+
+.dock-btn svg { width: 16px; height: 16px; }
+
+.dock-toggle {
+    position: relative;
+    border: none;
+    background: var(--line);
+    cursor: pointer;
+}
+.dock-toggle.has-active::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+}
+.dock-toggle.open {
+    background: var(--line-2);
+    color: var(--fg);
+}
+.dock-toggle.open svg { transform: rotate(45deg); }
+.dock-toggle svg {
+    transition: transform 0.2s var(--ease);
+}
+
+.dock-popover {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translate(-50%, 8px) scale(0.96);
+    display: flex;
+    gap: 2px;
+    padding: 5px;
+    background: var(--panel);
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+    z-index: 25;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s var(--ease), transform 0.2s var(--ease);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.dock-popover.open {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+}
+.dock-popover .dock-btn {
+    width: 32px;
+    height: 32px;
+}
+
+@media (max-width: 520px) {
+    .dock-popover { max-width: calc(100vw - 36px); flex-wrap: wrap; justify-content: center; }
+}

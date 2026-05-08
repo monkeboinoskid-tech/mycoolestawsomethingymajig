@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-69T9E59SM7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-69T9E59SM7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Monkturne · Settings</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='%23c9c1ff'/><circle cx='22' cy='14' r='11' fill='%23050610'/></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/css/global.css">
+    <link rel="stylesheet" href="/src/css/dock.css">
+    <link rel="stylesheet" href="/src/css/settings-page.css">
+    <style>html,body{background:#05060d;color:#eae6ff;margin:0}</style>
+</head>
+<body>
+
+<canvas id="bgCanvas" class="visible"></canvas>
+
+<div class="page-header">
+    <div>
+        <span class="brand-title">Monkturne</span>
+        <span class="brand-sub">Settings</span>
+    </div>
+    <a href="/" class="back">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back
+    </a>
+</div>
+
+<main class="wrap">
+
+    <div class="intro">
+        <h1>Settings</h1>
+        <p>Customize Monkturne's look, behavior, and preferences. All settings save instantly and stay on this device.</p>
+    </div>
+
+    <section class="card">
+        <div class="card-head">
+            <h2 class="card-title">Appearance</h2>
+            <p class="card-sub">How the app looks.</p>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Interface color</div>
+                <div class="row-desc">Customize the background color of panels and toolbars.</div>
+            </div>
+            <div class="row-control">
+                <input type="color" id="panelColorPicker" class="color-picker-large">
+                <button class="btn ghost" id="panelResetColorBtn">Reset</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Interface transparency</div>
+                <div class="row-desc">Adjust the glass effect strength.</div>
+            </div>
+            <div class="row-control">
+                <input type="range" id="panelOpacityRange" min="10" max="100" step="5" class="range">
+                <span class="range-val" id="panelOpacityVal">60%</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Star density</div>
+                <div class="row-desc">Number of stars in the background.</div>
+            </div>
+            <div class="row-control">
+                <input type="range" id="starDensityRange" min="20" max="200" step="10" class="range">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Custom background image</div>
+                <div class="row-desc">Upload your own background. Stored locally, max 5 MB.</div>
+            </div>
+            <div class="row-control row-control-stack">
+                <div class="bg-preview" id="bgPreview"></div>
+                <div class="row-actions">
+                    <input type="file" id="bgUploadInput" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none">
+                    <button class="btn" id="bgUploadBtn">Choose image…</button>
+                    <button class="btn ghost" id="bgClearBtn">Remove</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Background opacity</div>
+                <div class="row-desc">How visible your background is.</div>
+            </div>
+            <div class="row-control">
+                <input type="range" id="bgOpacityRange" min="0" max="100" step="5" class="range">
+                <span class="range-val" id="bgOpacityVal">100%</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Background blur</div>
+                <div class="row-desc">Soft-focus the background image.</div>
+            </div>
+            <div class="row-control">
+                <input type="range" id="bgBlurRange" min="0" max="40" step="2" class="range">
+                <span class="range-val" id="bgBlurVal">0px</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Ambient particle background</div>
+                <div class="row-desc">The animated default background. Disable for slower devices.</div>
+            </div>
+            <div class="row-control">
+                <label class="toggle"><input type="checkbox" id="fxToggle"><span class="track"></span></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Accent color</div>
+                <div class="row-desc">Used for buttons, highlights, and chips.</div>
+            </div>
+            <div class="row-control">
+                <div class="swatch-row">
+                    <button class="swatch" data-color="#b8b0da" style="background:#b8b0da" title="Lavender (default)"></button>
+                    <button class="swatch" data-color="#82d0a4" style="background:#82d0a4" title="Mint"></button>
+                    <button class="swatch" data-color="#d8b16a" style="background:#d8b16a" title="Amber"></button>
+                    <button class="swatch" data-color="#d08282" style="background:#d08282" title="Coral"></button>
+                    <button class="swatch" data-color="#88b8e0" style="background:#88b8e0" title="Sky"></button>
+                    <button class="swatch" data-color="#c188e0" style="background:#c188e0" title="Orchid"></button>
+                    <input type="color" id="accentPicker" class="color-picker" title="Custom">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">UI scale</div>
+                <div class="row-desc">Make Monkturne's UI bigger or smaller.</div>
+            </div>
+            <div class="row-control">
+                <input type="range" id="scaleRange" min="80" max="130" step="5" class="range">
+                <span class="range-val" id="scaleVal">100%</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Reduce animations</div>
+                <div class="row-desc">Disable transitions and motion effects.</div>
+            </div>
+            <div class="row-control">
+                <label class="toggle"><input type="checkbox" id="reduceMotionToggle"><span class="track"></span></label>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="card-head">
+            <h2 class="card-title">Browse</h2>
+            <p class="card-sub">Search and proxy behavior.</p>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Search engine</div>
+                <div class="row-desc">Default engine for the home search bar.</div>
+            </div>
+            <div class="row-control">
+                <select id="engineSelect" class="select"></select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Proxy DNS</div>
+                <div class="row-desc">Use Cloudflare (1.1.1.1) for proxied requests.</div>
+            </div>
+            <div class="row-control">
+                <label class="toggle"><input type="checkbox" id="cfDnsToggle"><span class="track"></span></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Proxy transport</div>
+                <div class="row-desc">Select the connection method.</div>
+            </div>
+            <div class="row-control">
+                <select id="transportSelect" class="select">
+                    <option value="auto">Auto (Default)</option>
+                    <option value="cloudflare">Cloudflare Worker</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Auto about:blank cloak</div>
+                <div class="row-desc">Automatically open Monkturne in a about:blank tab to hide it from history.</div>
+            </div>
+            <div class="row-control">
+                <label class="toggle"><input type="checkbox" id="autoCloakToggle"><span class="track"></span></label>
+                <button class="btn ghost sm" id="cloakNowBtn" style="margin-top: 8px; width: 100%;">Cloak now</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Tab cloak</div>
+                <div class="row-desc">Disguise the browser tab as another site.</div>
+            </div>
+            <div class="row-control">
+                <select id="cloakSelect" class="select"></select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Proxy engine</div>
+                <div class="row-desc">Scramjet is the built-in high-performance engine for Monkturne.</div>
+            </div>
+            <div class="row-control">
+                <select id="proxyEngineSelect" class="select" disabled>
+                    <option value="scramjet">Scramjet (active)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Debug overlay</div>
+                <div class="row-desc">Show transport + service worker status on screen.</div>
+            </div>
+            <div class="row-control">
+                <label class="toggle"><input type="checkbox" id="debugToggle"><span class="track"></span></label>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="card-head">
+            <h2 class="card-title">Portable Export</h2>
+            <p class="card-sub">Export Monkturne as a single standalone file.</p>
+        </div>
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Download .html</div>
+                <div class="row-desc">Get a single-file version of the browser that you can host on a custom website or open locally.</div>
+            </div>
+            <div class="row-control">
+                <a href="/portable.html" download="monkturne-portable.html" class="btn">Download portable</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="card danger-card">
+        <div class="card-head">
+            <h2 class="card-title">Recovery</h2>
+            <p class="card-sub">Reset things if the proxy gets stuck.</p>
+        </div>
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Reset proxy</div>
+                <div class="row-desc">Clears the service worker + scramjet storage. Reloads the page.</div>
+            </div>
+            <div class="row-control">
+                <button class="btn" id="resetProxyBtn">Reset proxy</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="row-label">
+                <div class="row-name">Reset all settings</div>
+                <div class="row-desc">Restore everything to default. Doesn't sign you out.</div>
+            </div>
+            <div class="row-control">
+                <button class="btn danger" id="resetAllBtn">Reset all</button>
+            </div>
+        </div>
+    </section>
+
+    <p class="meta-foot">Settings save automatically · stored locally on this device only.</p>
+
+</main>
+
+<nav id="dock"></nav>
+<script src="/src/js/dock.js" type="module"></script>
+<script src="/src/js/bg.js" type="module"></script>
+<script src="/src/js/settings-page.js" defer></script>
+
+</body>
+</html>

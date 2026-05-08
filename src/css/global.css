@@ -1,0 +1,167 @@
+:root {
+    --bg:        #020308;
+    --bg-2:      #05060d;
+    --panel:     rgba(10, 11, 20, 0.6);
+    --line:      rgba(201, 193, 255, 0.08);
+    --line-2:    rgba(201, 193, 255, 0.15);
+    --line-3:    rgba(201, 193, 255, 0.3);
+    --fg:        #f0efff;
+    --fg-2:      rgba(240, 239, 255, 0.85);
+    --fg-3:      rgba(240, 239, 255, 0.55);
+    --dim:       rgba(240, 239, 255, 0.2);
+    --accent:    #c9c1ff;
+    --accent-2:  #4f46e5;
+    --ease:      cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; background: var(--bg); color: var(--fg); }
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Background Atmosphere */
+body::before, body::after {
+    content: '';
+    position: fixed;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(140px);
+    pointer-events: none;
+    opacity: 0.12;
+}
+
+body::before {
+    top: -20%;
+    left: -10%;
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(circle, #4f46e5 0%, transparent 70%);
+}
+
+body::after {
+    bottom: -15%;
+    right: -10%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+}
+
+#bgCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    animation: bgFadeIn 1.5s ease forwards;
+}
+
+#bgCanvas.visible { animation: bgFadeIn 1.2s ease 0.2s forwards; }
+
+@keyframes bgFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+#app {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    animation: appFadeIn 0.4s var(--ease) forwards;
+}
+
+@keyframes appFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(200, 195, 230, 0.09); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(200, 195, 230, 0.16); }
+
+::selection { background: rgba(184, 176, 218, 0.22); color: #fff; }
+
+button, input, textarea, select { font-family: inherit; color: inherit; outline: none; }
+button { cursor: pointer; background: none; border: none; }
+
+.hidden { display: none !important; }
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.ban-chip {
+    position: fixed;
+    top: 72px;
+    right: 24px;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 9999px;
+    color: #ef4444;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    backdrop-filter: blur(12px);
+    transition: all 0.2s var(--ease);
+    animation: slideDown 0.4s var(--ease);
+    cursor: pointer;
+}
+.ban-chip:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    transform: translateY(-1px);
+}
+.ban-chip svg { color: #ef4444; }
+.ban-chip-text {
+    font-weight: 700;
+}
+.ban-chip-timer {
+    color: #ef4444;
+    opacity: 0.8;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    padding-left: 8px;
+    border-left: 1px solid rgba(239, 68, 68, 0.2);
+    margin-left: 4px;
+}
+
+body.banned #searchHome {
+    pointer-events: none;
+    opacity: 0.5;
+}
+body.banned #searchHome::placeholder {
+    color: #d08282;
+}
+body.banned #urlBar {
+    pointer-events: none;
+    opacity: 0.5;
+}

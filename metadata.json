@@ -1,0 +1,6 @@
+{
+  "name": "Monkturne",
+  "description": "A proxy for Developers featuring Scramjet, Epoxy, and Bare-Mux.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

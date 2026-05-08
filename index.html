@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<!-- monkturne v1.2 -->
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-69T9E59SM7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-69T9E59SM7');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Monkturne</title>
+    <style>html,body{background:#05060d;color:#eae6ff;margin:0}</style>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='%23c9c1ff'/><circle cx='22' cy='14' r='11' fill='%23050610'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/css/global.css">
+    <link rel="stylesheet" href="/src/css/home.css">
+    <link rel="stylesheet" href="/src/css/toolbar.css">
+    <link rel="stylesheet" href="/src/css/loader.css">
+    <link rel="stylesheet" href="/src/css/frame.css">
+    <link rel="stylesheet" href="/src/css/error.css">
+    <link rel="stylesheet" href="/src/css/dock.css">
+    <link rel="stylesheet" href="/src/css/settings.css">
+    <link rel="stylesheet" href="/src/css/notice.css">
+</head>
+<body>
+
+<canvas id="bgCanvas" class="visible"></canvas>
+
+<a id="banChip" class="ban-chip" href="/banned.html" style="display:none">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+    <span class="ban-chip-text">Banned</span>
+    <span class="ban-chip-timer" id="banChipTimer">—</span>
+</a>
+
+<div id="app" class="visible">
+
+    <div id="welcomeBanner" class="welcome-banner">
+        <div class="welcome-content">
+            <h2>Welcome to Monkturne</h2>
+            <svg class="welcome-decoration" viewBox="0 0 300 60" preserveAspectRatio="none">
+                <path d="M 10 30 Q 75 10, 150 30 T 290 30" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M 20 40 Q 85 20, 160 40 T 280 40" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            </svg>
+
+            <p class="welcome-desc">A proxy for <span class="highlight">Developers</span></p>
+
+            <div class="welcome-info">
+                <div class="info-section">
+                    <h3>Contributors</h3>
+                    <p>MidnightSweat</p>
+                </div>
+                <div class="info-section">
+                    <h3>Tech Stack</h3>
+                    <ul class="tech-list">
+                        <li>Scramjet (WASM)</li>
+                        <li>Epoxy Transport</li>
+                        <li>Bare-Mux</li>
+                        <li>Wisp-JS</li>
+                        <li>Express.js</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="welcome-ok-btn" aria-label="Close welcome">Ok!</button>
+        </div>
+    </div>
+
+    <div id="homePage">
+        <h1 class="title">Monkturne</h1>
+
+        <form id="searchForm" class="search-wrap" autocomplete="off" data-form-type="other">
+            <svg class="search-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="7" cy="7" r="5"></circle>
+                <line x1="13" y1="13" x2="10.5" y2="10.5"></line>
+            </svg>
+            <input id="searchHome" type="search" name="q" class="search-field" placeholder="Search or enter a URL" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other">
+        </form>
+
+        <div class="links">
+            <button class="link-btn" data-url="https://www.youtube.com">YouTube</button>
+            <button class="link-btn" data-url="https://x.com">X</button>
+            <button class="link-btn" data-url="https://www.reddit.com">Reddit</button>
+            <button class="link-btn" data-url="https://github.com">GitHub</button>
+        </div>
+
+        <div style="margin-top: 40px; opacity: 0.4; font-size: 0.8rem; display: flex; gap: 16px; justify-content: center;">
+            <a href="/portable.html" style="color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border 0.2s;" onmouseover="this.style.borderBottomColor='currentColor'" onmouseout="this.style.borderBottomColor='transparent'">Portable Version</a>
+        </div>
+    </div>
+
+    <div id="toolbar">
+        <button class="tb-btn" id="btnBack" aria-label="Back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="tb-btn" id="btnFwd" aria-label="Forward">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <button class="tb-btn" id="btnReload" aria-label="Reload">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+        </button>
+        <div id="urlBar" contenteditable="true" role="textbox" aria-label="URL or search" spellcheck="false" data-placeholder="Search or enter URL"></div>
+        <button class="tb-btn" id="btnFullscreen" aria-label="Fullscreen">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4"/></svg>
+        </button>
+    </div>
+
+    <div id="lineLoader">
+        <div class="ll-bar"></div>
+        <div class="ll-meta">
+            <span class="ll-stage" id="llStage">connecting</span>
+            <span class="ll-sep">·</span>
+            <span class="ll-timer" id="llTimer">0.00s</span>
+        </div>
+    </div>
+
+    <iframe id="frame" title="Monkturne"></iframe>
+
+    <div id="errorPage">
+        <p class="err-title">Page unreachable</p>
+        <p class="err-desc" id="errDetail">The destination did not respond.</p>
+        <div class="err-actions">
+            <button class="err-btn" id="homeFromErrorBtn">Home</button>
+            <button class="err-btn primary" id="retryBtn">Retry</button>
+        </div>
+    </div>
+
+    <nav id="dock"></nav>
+    <script src="/src/js/dock.js" type="module"></script>
+
+    <div id="settingsPanel">
+        <div class="cfg-group">
+            <div class="cfg-row">
+                <span>Ambient background</span>
+                <label class="toggle-wrap">
+                    <input type="checkbox" id="fxToggle" checked>
+                    <span class="toggle-track"></span>
+                </label>
+            </div>
+            <div class="cfg-row">
+                <span>Search engine</span>
+                <select id="engineSelect" class="cfg-select"></select>
+            </div>
+            <div class="cfg-row">
+                <span>Tab cloak</span>
+                <select id="cloakSelect" class="cfg-select"></select>
+            </div>
+            <div class="cfg-row">
+                <span>Debug overlay</span>
+                <label class="toggle-wrap">
+                    <input type="checkbox" id="debugToggle">
+                    <span class="toggle-track"></span>
+                </label>
+            </div>
+            <div class="cfg-row">
+                <span>Proxy engine</span>
+                <select id="proxyEngineSelect" class="cfg-select" disabled>
+                    <option value="scramjet">Scramjet (active)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="cfg-group">
+            <div class="cfg-row cfg-row-actions">
+                <button class="cfg-btn" id="resetProxyBtn">Reset proxy</button>
+            </div>
+        </div>
+
+        <div class="cfg-legal">
+            <a href="/privacy.html">Privacy</a>
+            <span>·</span>
+            <a href="/terms.html">Terms</a>
+        </div>
+    </div>
+
+</div>
+
+<div id="overrideModal" class="override-modal">
+    <div class="override-card">
+        <div class="override-icon">!</div>
+        <div class="override-title">Search blocked</div>
+        <div class="override-desc" id="overrideDesc">This search has been flagged. Enter the override password to continue, or it will be denied and your account will be banned for 24 hours.</div>
+        <input type="password" id="overrideInput" placeholder="Override password" autocomplete="off">
+        <div class="override-err" id="overrideErr"></div>
+        <div class="override-actions">
+            <button class="override-btn" id="overrideCancel">Cancel</button>
+            <button class="override-btn primary" id="overrideSubmit">Continue</button>
+        </div>
+    </div>
+</div>
+
+<div id="updateToast" class="update-toast" role="status" aria-live="polite">
+    <div class="ut-icon">✦</div>
+    <div class="ut-body">
+        <div class="ut-title">Update v1.2.1 released</div>
+        <div class="ut-desc">Fixed proxy + new settings page</div>
+    </div>
+    <button class="ut-close" aria-label="Dismiss">×</button>
+</div>
+
+<script src="/src/js/bg.js" type="module"></script>
+<script src="/src/js/debug.js" type="module"></script>
+<script type="module" src="/src/js/app.js"></script>
+<script src="/src/js/notice.js" type="module"></script>
+
+</body>
+</html>
