@@ -1,1 +1,1 @@
-importScripts("/scram/scramjet.all.js");
+importScripts("scram/scramjet.all.js");

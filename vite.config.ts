@@ -7,8 +7,24 @@ export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
     plugins: [react(), tailwindcss()],
+    base: './',
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+    },
+    build: {
+      rollupOptions: {
+        input: {
+          main: path.resolve(__dirname, 'index.html'),
+          settings: path.resolve(__dirname, 'settings.html'),
+          games: path.resolve(__dirname, 'games.html'),
+          portable: path.resolve(__dirname, 'portable.html'),
+          apps: path.resolve(__dirname, 'apps.html'),
+          privacy: path.resolve(__dirname, 'privacy.html'),
+          terms: path.resolve(__dirname, 'terms.html'),
+          banned: path.resolve(__dirname, 'banned.html'),
+          code: path.resolve(__dirname, 'code.html'),
+        },
+      },
     },
     resolve: {
       alias: {

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banned · Monkturne</title>
+    <link rel="stylesheet" href="src/css/global.css">
+    <style>
+        body { background: #05060d; color: #ff6b6b; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; text-align: center; }
+        .wrap { max-width: 500px; padding: 20px; }
+        h1 { font-size: 3rem; margin-bottom: 1rem; }
+        p { color: #eae6ff; opacity: 0.8; }
+        .timer { font-size: 2rem; font-weight: bold; margin: 20px 0; color: #ff6b6b; }
+        a { color: #c9c1ff; text-decoration: none; display: block; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>Access Denied</h1>
+        <p>Your account has been temporarily restricted due to a policy violation.</p>
+        <div class="timer" id="timer">23:59:59</div>
+        <p>Restrictions will be automatically lifted once the timer expires.</p>
+        <a href="index.html">Return to Safety</a>
+    </div>
+    <script>
+        // Fake timer for the placeholder
+        let seconds = 24 * 60 * 60;
+        const el = document.getElementById('timer');
+        setInterval(() => {
+            seconds--;
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            el.textContent = `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }, 1000);
+    </script>
+</body>
+</html>

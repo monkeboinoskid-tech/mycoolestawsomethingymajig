@@ -1,4 +1,4 @@
-import { getProxied } from "/math.mjs";
+import { getProxied } from "../../math.mjs";
 
 const cache = new Map();
 const MAX_ENTRIES = 24;

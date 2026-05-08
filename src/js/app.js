@@ -1,9 +1,9 @@
-import { getProxied } from "/math.mjs";
-import { initPerformance } from "/src/js/performance.js";
-import { mountLoader } from "/src/js/loader.js";
-import { wireHoverPrefetch, prefetchedUrl } from "/src/js/prefetch.js";
-import { listCloaks, applyCloak, restoreCloak, reset as resetCloak } from "/src/js/cloak.js";
-import { initWelcome } from "/src/js/welcome.js";
+import { getProxied } from "../../math.mjs";
+import { initPerformance } from "./performance.js";
+import { mountLoader } from "./loader.js";
+import { wireHoverPrefetch, prefetchedUrl } from "./prefetch.js";
+import { listCloaks, applyCloak, restoreCloak, reset as resetCloak } from "./cloak.js";
+import { initWelcome } from "./welcome.js";
 
 const frame = document.getElementById("frame");
 const toolbar = document.getElementById("toolbar");
@@ -167,7 +167,7 @@ function showHome(pushHistory = true) {
     toolbar.classList.remove("visible");
     homePage.style.display = "";
     errorPage.classList.remove("visible");
-    if (pushHistory) history.pushState(null, "", "/");
+    if (pushHistory) history.pushState(null, "", "./");
     navStack = [];
     navIndex = -1;
     updateNavButtons();
@@ -204,7 +204,7 @@ async function load(url, addToHistory = true) {
         frame.classList.remove("visible");
 
         if (addToHistory) {
-            history.pushState(null, "", "/search/" + obfuscate(url));
+            history.pushState(null, "", "search/" + obfuscate(url));
             navStack = navStack.slice(0, navIndex + 1);
             navStack.push(url);
             navIndex = navStack.length - 1;
@@ -429,8 +429,10 @@ document.addEventListener("keydown", e => {
 
 window.addEventListener("popstate", () => {
     const p = window.location.pathname;
-    if (p.startsWith("/search/")) {
-        const decoded = deobfuscate(p.slice(8));
+    if (p.includes("/search/")) {
+        const parts = p.split("/search/");
+        const enc = parts[parts.length - 1];
+        const decoded = deobfuscate(enc);
         if (decoded) load(decoded, false);
     } else {
         showHome(false);
@@ -438,8 +440,10 @@ window.addEventListener("popstate", () => {
 });
 
 const initPath = window.location.pathname;
-if (initPath.startsWith("/search/")) {
-    const decoded = deobfuscate(initPath.slice(8));
+if (initPath.includes("/search/")) {
+    const parts = initPath.split("/search/");
+    const enc = parts[parts.length - 1];
+    const decoded = deobfuscate(enc);
     if (decoded) load(decoded);
 }
 
