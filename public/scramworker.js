@@ -1,8 +1,8 @@
 try {
-    importScripts("https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@main/scramjet.all.js");
+    importScripts("https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet@v3/dist/scramjet.all.js");
 } catch (e) {}
 if (typeof ScramjetWorker === "undefined") {
-    importScripts("https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@main/scramjet.code.js");
+    importScripts("https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet@v3/dist/scramjet.code.js");
 }
 
 const scramjet = new ScramjetWorker();

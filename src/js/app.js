@@ -247,9 +247,18 @@ async function load(url, addToHistory = true) {
 function parseInput(value) {
     const v = (value || "").trim();
     if (!v) return null;
+    const engineKey = localStorage.getItem("nocturne-engine") || "duckduckgo";
+    const engine = ENGINES[engineKey] || ENGINES.duckduckgo;
+    
     if (/^https?:\/\//i.test(v)) return v;
-    if (!v.includes(" ") && (v.includes(".") || v.startsWith("localhost"))) return "https://" + v;
-    return ENGINES[currentEngine].url(v);
+    if (v.includes(".") && !v.includes(" ") && !v.startsWith("http")) {
+        return "https://" + v;
+    }
+    if (v.startsWith("localhost") || /^\d{1,3}(\.\d{1,3}){3}/.test(v)) {
+        return "http://" + v;
+    }
+    
+    return engine.url(v);
 }
 
 async function serverModerationCheck(rawQuery) {
@@ -323,13 +332,21 @@ async function promptOverride(rawQuery) {
 searchForm.addEventListener("submit", async e => {
     e.preventDefault();
     const raw = searchHome.value;
+    console.log("[monkturne] Search submitted:", raw);
     const url = parseInput(raw);
-    if (url) { searchHome.value = ""; load(url); }
+    if (url) { 
+        console.log("[monkturne] Loading URL:", url);
+        searchHome.value = ""; 
+        load(url); 
+    } else {
+        console.warn("[monkturne] Parse input returned null for:", raw);
+    }
 });
 
 urlBar.addEventListener("keydown", e => {
     if (e.key !== "Enter") return;
     const raw = urlBar.value;
+    console.log("[monkturne] URL bar submitted:", raw);
     const url = parseInput(raw);
     if (url) load(url);
 });

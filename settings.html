@@ -201,7 +201,18 @@
                 <select id="transportSelect" class="select">
                     <option value="auto">Auto (Default)</option>
                     <option value="cloudflare">Cloudflare Worker</option>
+                    <option value="custom">Custom WISP Server</option>
                 </select>
+            </div>
+        </div>
+
+        <div class="row" id="wispUrlRow" style="display:none">
+            <div class="row-label">
+                <div class="row-name">Custom WISP URL</div>
+                <div class="row-desc">The WebSocket URL of your WISP server.</div>
+            </div>
+            <div class="row-control">
+                <input type="text" id="wispUrlInput" class="select" style="text-align: left; padding: 4px 8px;" placeholder="wss://monketurne.monkturne.workers.dev/">
             </div>
         </div>
 

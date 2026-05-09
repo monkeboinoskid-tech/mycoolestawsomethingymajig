@@ -19,6 +19,7 @@ const PREFS = {
     autoCloak:     "nocturne-auto-cloak",
     cfDns:         "nocturne-cf-dns",
     transport:     "nocturne-transport-pref",
+    wispUrl:       "nocturne-wisp-url",
     proxyEngine:   "nocturne-proxy-engine",
     debug:         "nocturne-debug"
 };
@@ -151,21 +152,46 @@ cfDnsToggle.addEventListener("change", () => {
 
 const transportSelect = $("transportSelect");
 transportSelect.value = get(PREFS.transport, "auto");
+
+const wispUrlRow = $("wispUrlRow");
+const wispUrlInput = $("wispUrlInput");
+
+function updateWispUI() {
+    if (transportSelect.value === "custom") {
+        if (wispUrlRow) wispUrlRow.style.display = "";
+    } else {
+        if (wispUrlRow) wispUrlRow.style.display = "none";
+    }
+}
+
+updateWispUI();
+if (wispUrlInput) {
+    wispUrlInput.value = get(PREFS.wispUrl, "");
+    wispUrlInput.addEventListener("change", () => set(PREFS.wispUrl, wispUrlInput.value));
+}
+
 transportSelect.addEventListener("change", () => {
-    set(PREFS.transport, transportSelect.value);
+    const val = transportSelect.value;
+    set(PREFS.transport, val);
+    if (val === "cloudflare" && !get(PREFS.wispUrl, "")) {
+        wispUrlInput.value = "wss://monketurne.monkturne.workers.dev/";
+        set(PREFS.wispUrl, wispUrlInput.value);
+    }
+    updateWispUI();
     localStorage.setItem("nocturne-engine-swap", "true");
 });
 
 const autoCloakToggle = $("autoCloakToggle");
+const cloakNowBtn = $("cloakNowBtn");
+
 autoCloakToggle.checked = get(PREFS.autoCloak, "0") === "1";
 autoCloakToggle.addEventListener("change", () => {
     set(PREFS.autoCloak, autoCloakToggle.checked ? "1" : "0");
-    if (autoCloakToggle.checked) {
-        if (confirm("Monkturne will now try to cloak in about:blank. Proceed?")) {
-            cloakToAboutBlank();
-        }
-    }
 });
+
+if (cloakNowBtn) {
+    cloakNowBtn.addEventListener("click", () => cloakToAboutBlank());
+}
 
 function cloakToAboutBlank() {
     try {

@@ -25,7 +25,7 @@ const resolvePath = (p) => {
 const PROXY_ENGINE = "scramjet";
 const SW_PATH = resolvePath("scramworker.js");
 
-const SCRAMJET_CDN = "https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@main/";
+const SCRAMJET_CDN = "https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet@v3/dist/";
 
 async function clearOldSW() {
     if ("serviceWorker" in navigator) {
@@ -180,8 +180,10 @@ if (window.self === window.top) {
         candidates = [...absolute, ...relative];
     }
 
-    if (transportPref === "cloudflare") {
-        candidates = ["/api/v2/connect/", "/api/sync/", ...candidates];
+    if (transportPref === "cloudflare" || transportPref === "custom") {
+        const customWisp = localStorage.getItem("nocturne-wisp-url");
+        if (customWisp) candidates = [customWisp, ...candidates];
+        else if (transportPref === "cloudflare") candidates = ["/api/v2/connect/", "/api/sync/", ...candidates];
     }
     
     if (lastGood && WISP_PATHS.includes(lastGood)) {
@@ -235,12 +237,11 @@ async function loadScramjetScript() {
     try {
         await new Promise((res, rej) => {
             const s = document.createElement("script");
-            // Some builds use scramjet.all.js, others use scramjet.code.js
+            // Try scramjet.all.js then scramjet.code.js
             s.src = SCRAMJET_CDN + "scramjet.all.js";
             s.async = true;
             s.onload = res;
             s.onerror = () => {
-                // Try fallback to scramjet.code.js
                 const s2 = document.createElement("script");
                 s2.src = SCRAMJET_CDN + "scramjet.code.js";
                 s2.async = true;
@@ -273,13 +274,24 @@ function buildController() {
             captureErrors: true,
             cleanErrors: true,
             sourcemaps: false,
-            scramitize: false
+            scramitize: false,
+            injectPlugins: true
         },
         siteFlags: {
             ".*": {
                 aggressive: true,
                 rewriteUrls: true,
-                handleWebSockets: true
+                handleWebSockets: true,
+                fixScrolling: true,
+                injectStyle: `
+                    html, body { 
+                        overflow: auto !important; 
+                        height: auto !important; 
+                        min-height: 100vh !important;
+                    }
+                    ::-webkit-scrollbar { width: 8px; height: 8px; display: block !important; }
+                    ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.5); border-radius: 4px; }
+                `
             }
         }
     });
