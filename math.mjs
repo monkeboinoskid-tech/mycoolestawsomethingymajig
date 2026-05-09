@@ -25,7 +25,7 @@ const resolvePath = (p) => {
 const PROXY_ENGINE = "scramjet";
 const SW_PATH = resolvePath("scramworker.js");
 
-const SCRAMJET_CDN = "https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet@v3/dist/";
+const SCRAMJET_CDN = "https://cdn.jsdelivr.net/gh/MercuryWorkshop/scramjet-builds@latest/dist/";
 
 async function clearOldSW() {
     if ("serviceWorker" in navigator) {
@@ -274,7 +274,7 @@ function buildController() {
             captureErrors: true,
             cleanErrors: true,
             sourcemaps: false,
-            scramitize: false,
+            scramitize: true,
             injectPlugins: true
         },
         siteFlags: {
@@ -282,15 +282,46 @@ function buildController() {
                 aggressive: true,
                 rewriteUrls: true,
                 handleWebSockets: true,
-                fixScrolling: true,
+                fixScrolling: false,
                 injectStyle: `
                     html, body { 
                         overflow: auto !important; 
                         height: auto !important; 
                         min-height: 100vh !important;
+                        position: relative !important;
                     }
-                    ::-webkit-scrollbar { width: 8px; height: 8px; display: block !important; }
-                    ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.5); border-radius: 4px; }
+                    * {
+                        scrollbar-width: thin !important;
+                        scrollbar-color: rgba(128,128,128,0.5) transparent !important;
+                    }
+                    ::-webkit-scrollbar { width: 8px !important; height: 8px !important; display: block !important; }
+                    ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.5) !important; border-radius: 4px !important; }
+                    ::-webkit-scrollbar-track { background: transparent !important; }
+                `,
+                injectScript: `
+                    (function() {
+                        const fix = () => {
+                            try {
+                                if (document.documentElement.style.overflow === 'hidden') document.documentElement.style.setProperty('overflow', 'auto', 'important');
+                                if (document.body.style.overflow === 'hidden') document.body.style.setProperty('overflow', 'auto', 'important');
+                                
+                                // Fix height issues
+                                if (document.body.offsetHeight < document.body.scrollHeight) {
+                                    document.documentElement.style.setProperty('height', 'auto', 'important');
+                                    document.body.style.setProperty('height', 'auto', 'important');
+                                }
+                            } catch(e) {}
+                        };
+                        fix();
+                        window.addEventListener('load', fix);
+                        window.addEventListener('resize', fix);
+                        setInterval(fix, 3000);
+                        
+                        // Force visually hidden scrollbars visible
+                        const style = document.createElement('style');
+                        style.textContent = 'html,body{overflow:auto!important;height:auto!important;}';
+                        (document.head || document.documentElement).appendChild(style);
+                    })();
                 `
             }
         }

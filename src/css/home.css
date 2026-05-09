@@ -74,6 +74,30 @@
 
 .search-field::placeholder { color: var(--fg-3); }
 
+.search-go-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(200, 195, 230, 0.08);
+    color: var(--fg-2);
+    transition: all 0.2s var(--ease);
+    flex-shrink: 0;
+    margin-right: -4px;
+}
+
+.search-go-btn:hover {
+    background: var(--accent);
+    color: #05060d;
+    transform: scale(1.05);
+}
+
+.search-go-btn:active {
+    transform: scale(0.95);
+}
+
 .links {
     display: flex;
     gap: 6px;
